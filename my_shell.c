@@ -75,10 +75,11 @@ int main(int argc, char* argv[]) {
        //do whatever you want with the commands, here we just print them
 		int retval = fork();
 		if(retval == 0){
-			execvp(tokens[0], tokens);
+			exec(tokens[0]);
 		}
 		else{
-
+			int pid = retval;
+			wait(pid);
 		}
 		for(i=0;tokens[i]!=NULL;i++){
 			printf("found token %s (remove this debug output later)\n", tokens[i]);
