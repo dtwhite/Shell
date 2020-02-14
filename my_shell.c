@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #define MAX_INPUT_SIZE 1024
 #define MAX_TOKEN_SIZE 64
@@ -75,7 +76,7 @@ int main(int argc, char* argv[]) {
        //do whatever you want with the commands, here we just print them
 		int retval = fork();
 		if(retval == 0){
-			exec(tokens[0]);
+			execvp(tokens[0], tokens);
 		}
 		else{
 			int pid = retval;
