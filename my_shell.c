@@ -72,17 +72,20 @@ int main(int argc, char* argv[]) {
 
 		line[strlen(line)] = '\n'; //terminate with new line
 		tokens = tokenize(line);
-		if(strcmp(tokens[0], "cd")==0){
+		if(tokens == NULL){
+			continue;
+		}
+		else if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
 			if(result == -1)
-				printf("Failed to change directory\n");
+				perror("Shell: Incorrect command\n");
 		}
 		else{
 		//do whatever you want with the commands, here we just print them
 			int retval = fork();
 			if(retval == 0){
 				execvp(tokens[0], tokens);
-				printf("Error");
+				printf("");
 				exit(1);
 			}
 			else{
