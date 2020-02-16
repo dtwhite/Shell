@@ -39,7 +39,6 @@ char **tokenize(char *line)
   return tokens;
 }
 
-
 int main(int argc, char* argv[]) {
 	char  line[MAX_INPUT_SIZE];            
 	char  **tokens;              
@@ -69,8 +68,13 @@ int main(int argc, char* argv[]) {
 		}
 		//printf("Command entered: %s (remove this debug output later)\n", line);
 		/* END: TAKING INPUT */
-
-		line[strlen(line)] = '\n'; //terminate with new line
+		bool background = false;
+		if(strcmp(tokens[strlen(line)-1], "&") == 0){
+			background = true;
+			line[strlen(line)-1] = '\n';
+		}
+		else
+			line[strlen(line)] = '\n'; //terminate with new line
 		tokens = tokenize(line);
 		if(*tokens == NULL){
 			continue;
@@ -89,7 +93,7 @@ int main(int argc, char* argv[]) {
 				exit(1);
 			}
 			else{
-				if(strcmp(tokens[strlen(line)-1], "&") != 0){
+				if(!background){
 					int pid = retval;
 					wait(&pid);
 				}
