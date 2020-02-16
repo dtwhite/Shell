@@ -74,7 +74,8 @@ int main(int argc, char* argv[]) {
 		tokens = tokenize(line);
 		if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
-			printf("%d", result);
+			if(result == -1)
+				printf("Hello");
 		}
 		else{
 		//do whatever you want with the commands, here we just print them
