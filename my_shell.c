@@ -77,6 +77,8 @@ int main(int argc, char* argv[]) {
 		int retval = fork();
 		if(retval == 0){
 			execvp(tokens[0], tokens);
+			printf("Error");
+			exit(1);
 		}
 		else{
 			int pid = retval;
