@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
 
 		line[strlen(line)] = '\n'; //terminate with new line
 		tokens = tokenize(line);
-		if(tokens == NULL){
+		if(*tokens == NULL){
 			continue;
 		}
 		else if(strcmp(tokens[0], "cd")==0){
