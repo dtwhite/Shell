@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <stdbool.h>
 
 #define MAX_INPUT_SIZE 1024
 #define MAX_TOKEN_SIZE 64
