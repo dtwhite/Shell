@@ -78,14 +78,14 @@ int main(int argc, char* argv[]) {
 		else if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
 			if(result == -1)
-				perror("Shell:");
+				perror("Shell");
 		}
 		else{
 		//do whatever you want with the commands, here we just print them
 			int retval = fork();
 			if(retval == 0){
 				execvp(tokens[0], tokens);
-				printf("Shell:");
+				perror("Shell: Incorrect Command");
 				exit(1);
 			}
 			else{
