@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 			int retval = fork();
 			if(retval == 0){
 				execvp(tokens[0], tokens);
-				printf("");
+				printf("Shell: Incorrect command");
 				exit(1);
 			}
 			else{
