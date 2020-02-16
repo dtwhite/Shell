@@ -72,28 +72,30 @@ int main(int argc, char* argv[]) {
 
 		line[strlen(line)] = '\n'; //terminate with new line
 		tokens = tokenize(line);
-   
-       //do whatever you want with the commands, here we just print them
-		int retval = fork();
-		if(retval == 0){
-			execvp(tokens[0], tokens);
-			printf("Error");
-			exit(1);
+		if(strcmp(tokens[0], "cd")==0){
+			int result = chdir(tokens[1]);
 		}
 		else{
-			int pid = retval;
-			wait(&pid);
+		//do whatever you want with the commands, here we just print them
+			int retval = fork();
+			if(retval == 0){
+				execvp(tokens[0], tokens);
+				printf("Error");
+				exit(1);
+			}
+			else{
+				int pid = retval;
+				wait(&pid);
+			}
+			for(i=0;tokens[i]!=NULL;i++){
+				printf("found token %s (remove this debug output later)\n", tokens[i]);
+			}
 		}
-		for(i=0;tokens[i]!=NULL;i++){
-			printf("found token %s (remove this debug output later)\n", tokens[i]);
-		}
-       
 		// Freeing the allocated memory	
 		for(i=0;tokens[i]!=NULL;i++){
 			free(tokens[i]);
 		}
 		free(tokens);
-
 	}
 	return 0;
 }
