@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 			scanf("%[^\n]", line);
 			getchar();
 		}
-		printf("Command entered: %s (remove this debug output later)\n", line);
+		//printf("Command entered: %s (remove this debug output later)\n", line);
 		/* END: TAKING INPUT */
 
 		line[strlen(line)] = '\n'; //terminate with new line
@@ -92,9 +92,9 @@ int main(int argc, char* argv[]) {
 				int pid = retval;
 				wait(&pid);
 			}
-			for(i=0;tokens[i]!=NULL;i++){
+			/*for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
-			}
+			}*/
 		}
 		// Freeing the allocated memory	
 		for(i=0;tokens[i]!=NULL;i++){
