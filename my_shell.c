@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 		if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
 			if(result == -1)
-				printf("Hello");
+				printf("Failed to change directory\n");
 		}
 		else{
 		//do whatever you want with the commands, here we just print them
