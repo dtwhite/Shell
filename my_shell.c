@@ -94,12 +94,13 @@ int main(int argc, char* argv[]) {
 				exit(1);
 			}
 			else{
+				int pid = retval;
 				if(!background){
-					int pid = retval;
 					wait(&pid);
 				}
 				else{
-					waitpid(WNOHANG);
+					int status;
+					waitpid(&pid, &status, WNOHANG);
 				}
 				
 			}
