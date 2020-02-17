@@ -94,7 +94,6 @@ int main(int argc, char* argv[]) {
 		printf("The number of ambersands is %d", numOfAmbersands(tokens));
 		switch(numOfAmbersands(tokens)){
 			case 1:
-				printf("I made it here");
 				background = true;
 				line[strlen(line) - 1] = '\n';
 				tokens = tokenize(line);
@@ -136,9 +135,9 @@ int main(int argc, char* argv[]) {
 				}
 				
 			}
-			/*for(i=0;tokens[i]!=NULL;i++){
+			for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
-			}*/
+			}
 		}
 		// Freeing the allocated memory	
 		for(i=0;tokens[i]!=NULL;i++){
