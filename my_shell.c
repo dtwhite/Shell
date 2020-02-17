@@ -42,7 +42,7 @@ char **tokenize(char *line)
 }
 
 int grabCommand(char **tokens, int basePointer){
-	int counter = basePointer
+	int counter = basePointer;
 	while(strcmp(tokens[counter], "&&") != 0){
 		counter++
 	}
