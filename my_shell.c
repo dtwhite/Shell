@@ -59,8 +59,8 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 	int i;
 	char **command = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
 	int counter =0; 
-	for(i = 0; tokens[basePointer + i] != NULL; i++){
-		strcpy(command[i], tokens[basePointer + i]);
+	for(basePointer; basePointer < endPointer; basePointer++){
+		strcpy(command[counter], tokens[basePointer]);
 		counter++;
 	}
 	printf("the counter is %d", counter);
