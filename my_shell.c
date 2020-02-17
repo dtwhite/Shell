@@ -58,12 +58,14 @@ int grabCommand(char **tokens, int basePointer){
 char **copyTokens(char **tokens, int basePointer, int endPointer){
 	int i;
 	char **command = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
-	for(i = 0; command[i] != NULL; i++){
+	for(i = 0; tokens[basePointer + i] != NULL; i++){
 		strcpy(command[i], tokens[basePointer + i]);
 	}
+	printf("I made it here")
 	for(i=0;command[i]!=NULL;i++){
 		printf("found token %s (remove this debug output later)\n", command[i]);
 	}
+	return command;
 }
 
 
