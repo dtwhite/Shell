@@ -134,6 +134,10 @@ int main(int argc, char* argv[]) {
 					}	
 				}
 			}
+			for(i=0;command[i]!=NULL;i++){
+				free(command[i]);
+			}
+			free(command);
 			basePointer = futurePointer;	
 				
 		}
