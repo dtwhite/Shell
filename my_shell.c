@@ -65,7 +65,8 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 		basePointer++;
 		counter++;
 	}
-	printf("the counter is %d", counter);
+	command[counter] = NULL;
+	printf("the counter is %d\n", counter);
 	for(i=0;command[i]!=NULL;i++){
 		printf("found token %s\n", command[i]);
 	}
@@ -120,12 +121,10 @@ int main(int argc, char* argv[]) {
 		while(tokens[basePointer] != NULL){
 			int futurePointer = grabCommand(tokens, basePointer);
 			printf("The future pointer is %d\n", futurePointer);
-			copyTokens(tokens, basePointer, futurePointer);
-
-
+			char **command = copyTokens(tokens, basePointer, futurePointer);
 			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
-			/*if(strcmp(tokens[basePointer], "cd") == 0){
+			if(strcmp(tokens[basePointer], "cd") == 0){
 				int result = chdir(tokens[basePointer+1]);
 				if(result == -1)
 					perror("Shell");
@@ -133,7 +132,7 @@ int main(int argc, char* argv[]) {
 			else{
 				int retval = fork();
 				if(retval == 0){
-					execvp(tokens[basePointer], tokens);
+					execvp(command[0], command);
 					printf("Shell: Incorrect Command\n");
 					exit(1);
 				}
