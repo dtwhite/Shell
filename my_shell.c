@@ -94,6 +94,7 @@ int main(int argc, char* argv[]) {
 		printf("The number of ambersands is %d", numOfAmbersands(tokens));
 		switch(numOfAmbersands(tokens)){
 			case 1:
+				printf("I made it here");
 				background = true;
 				line[strlen(line) - 1] = '\n';
 				tokens = tokenize(line);
