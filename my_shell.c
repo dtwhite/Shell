@@ -59,6 +59,16 @@ int grabCommand(char **tokens, int basePointer){
 	return counter;
 }
 
+char **copyTokens(char **tokens, int basePointer, int endPointer){
+	char **command = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
+	for(int i = 0; i != NULL; i++){
+		strcpy(command[i], tokens[basePointer + i]);
+	}
+	for(i=0;command[i]!=NULL;i++){
+		printf("found token %s (remove this debug output later)\n", command[i]);
+	}
+}
+
 
 int main(int argc, char* argv[]) {
 	char  line[MAX_INPUT_SIZE];            
@@ -107,7 +117,9 @@ int main(int argc, char* argv[]) {
 		while(tokens[basePointer] != NULL){
 			int futurePointer = grabCommand(tokens, basePointer);
 			printf("The future pointer is %d\n", futurePointer);
+			copyTokens(tokens, basePointer, futurePointer);
 
+/*
 			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
 			if(strcmp(tokens[basePointer], "cd") == 0){
