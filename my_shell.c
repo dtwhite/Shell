@@ -43,6 +43,7 @@ char **tokenize(char *line)
 
 int grabCommand(char **tokens, int basePointer){
 	int counter = basePointer;
+	int i;
 	for(i=0;tokens[i]!=NULL;i++){
 		printf("found token %s (remove this debug output later)\n", tokens[i]);
 	}
