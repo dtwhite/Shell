@@ -108,9 +108,9 @@ int main(int argc, char* argv[]) {
 			int futurePointer = grabCommand(tokens, basePointer);
 			printf("The future pointer is %d\n", futurePointer);
 
-			/*if(strcmp(tokens[futurePointer], "&&") == 0)
+			if(strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
-			if(strcmp(tokens[basePointer], "cd") == 0){
+			/*if(strcmp(tokens[basePointer], "cd") == 0){
 				int result = chdir(tokens[basePointer+1]);
 				if(result == -1)
 					perror("Shell");
@@ -130,8 +130,7 @@ int main(int argc, char* argv[]) {
 					}	
 				}
 			}*/
-			//basePointer = futurePointer;	
-			basePointer++;
+			basePointer = futurePointer;	
 				
 		}
 		/*else if(strcmp(tokens[0], "cd")==0){
