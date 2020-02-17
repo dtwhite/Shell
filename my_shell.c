@@ -47,7 +47,7 @@ int grabCommand(char **tokens, int basePointer){
 	for(i=0;tokens[i]!=NULL;i++){
 		printf("found token %s (remove this debug output later)\n", tokens[i]);
 	}
-	while(tokens[counter] != NULL){
+	while(tokens[counter] != NULL && strcmp(tokens[counter], "&&") != 0){
 		counter++;
 	}
 	return counter;
