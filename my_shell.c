@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 				}
 				else{
 					int status;
-					waitpid(&pid, &status, WNOHANG);
+					waitpid(-1, &status, WNOHANG);
 				}
 				
 			}
