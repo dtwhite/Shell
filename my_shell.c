@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <stdbool.h>
 
 #define MAX_INPUT_SIZE 1024
 #define MAX_TOKEN_SIZE 64
@@ -39,7 +40,6 @@ char **tokenize(char *line)
   return tokens;
 }
 
-
 int main(int argc, char* argv[]) {
 	char  line[MAX_INPUT_SIZE];            
 	char  **tokens;              
@@ -70,9 +70,15 @@ int main(int argc, char* argv[]) {
 		//printf("Command entered: %s (remove this debug output later)\n", line);
 		/* END: TAKING INPUT */
 		bool background = false;
+<<<<<<< HEAD
 		if(strlen(line) != 0 && strcmp(line[strlen(line)-1], "&") == 0){
 			line[strlen(line) - 1] = '\n';
 			background = true;
+=======
+		if(strcmp(tokens[strlen(line)-1], "&") == 0){
+			background = true;
+			line[strlen(line)-1] = '\n';
+>>>>>>> 8e7b187d758469ab6581b30dc138a5effcbb6fe7
 		}
 		else
 			line[strlen(line)] = '\n'; //terminate with new line
