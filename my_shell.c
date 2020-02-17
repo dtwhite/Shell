@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 		int basePointer = 0;
-		while(tokens[basePointer] != NULL){
+		while(*tokens[basePointer] != NULL){
 			int futurePointer = grabCommand(tokens, basePointer);
 			for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
