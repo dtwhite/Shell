@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
 		int basePointer = 0;
 		while(tokens[basePointer] != NULL){
 			int futurePointer = grabCommand(tokens, basePointer);
-			printf("The future pointer is %d", futurePointer);
+			printf("The future pointer is %d\n", futurePointer);
 
 			/*if(strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
