@@ -43,11 +43,14 @@ char **tokenize(char *line)
 
 int grabCommand(char **tokens, int basePointer){
 	int counter = basePointer;
-	while(*tokens != NULL && strcmp(tokens[counter], "&&") != 0){
+	for(i=0;tokens[i]!=NULL;i++){
+		printf("found token %s (remove this debug output later)\n", tokens[i]);
+	}
+	/*while(*tokens != NULL && strcmp(tokens[counter], "&&") != 0){
 		counter++;
 	}
 	printf("The counter is %d", counter);
-	tokens[counter] = NULL;
+	tokens[counter] = NULL;*/
 	return counter;
 }
 
@@ -97,12 +100,8 @@ int main(int argc, char* argv[]) {
 		}
 		int basePointer = 0;
 		while(tokens[basePointer] != NULL){
-			printf("We made it here");
 			//int futurePointer = grabCommand(tokens, basePointer);
 			//printf("The future pointer is %d", futurePointer);
-			for(i=0;tokens[i]!=NULL;i++){
-				printf("found token %s (remove this debug output later)\n", tokens[i]);
-			}
 			/*if(strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
 			if(strcmp(tokens[basePointer], "cd") == 0){
