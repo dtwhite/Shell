@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
 		int basePointer = 0;
 		while(tokens[basePointer] != NULL){
 			printf("We made it here");
-			int futurePointer = grabCommand(tokens, basePointer);
+			/*int futurePointer = grabCommand(tokens, basePointer);
 			for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
 			}
@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
 					}	
 				}
 			}
-			basePointer = futurePointer;			
+			basePointer = futurePointer;	*/		
 		}
 		/*else if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
