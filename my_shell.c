@@ -98,10 +98,6 @@ int main(int argc, char* argv[]) {
 				if(!background){
 					wait(&pid);
 				}
-				else{
-					int status;
-					waitpid(-1, &status, WNOHANG);
-				}
 				
 			}
 			/*for(i=0;tokens[i]!=NULL;i++){
