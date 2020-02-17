@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 					wait(&pid);
 				}
 				else{
-					signal(SIGCHLD,SIG_IGN); 
+					waitpid(WNOHANG);
 				}
 				
 			}
