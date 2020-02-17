@@ -94,9 +94,10 @@ int main(int argc, char* argv[]) {
 				exit(1);
 			}
 			else{
+				int status;
 				int pid = retval;
 				if(!background){
-					wait(&pid);
+					waitpid(pid, &status, 0);
 				}
 				
 			}
