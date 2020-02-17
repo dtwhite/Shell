@@ -47,7 +47,7 @@ int grabCommand(char **tokens, int basePointer){
 	for(i=0;tokens[i]!=NULL;i++){
 		printf("found token %s (remove this debug output later)\n", tokens[i]);
 	}
-	while(*tokens != NULL){
+	while(tokens[counter] != NULL){
 		counter++;
 	}
 	return counter;
@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 		while(tokens[basePointer] != NULL){
 			int futurePointer = grabCommand(tokens, basePointer);
 			printf("The future pointer is %d", futurePointer);
-			
+
 			/*if(strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
 			if(strcmp(tokens[basePointer], "cd") == 0){
