@@ -46,6 +46,7 @@ int grabCommand(char **tokens, int basePointer){
 	while(*tokens != NULL && strcmp(tokens[counter], "&&") != 0){
 		counter++;
 	}
+	printf("The counter is %d", counter);
 	tokens[counter] = NULL;
 	return counter;
 }
