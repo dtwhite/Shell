@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 		//printf("Command entered: %s (remove this debug output later)\n", line);
 		/* END: TAKING INPUT */
 		bool background = false;
-		if(strlen(line) != 0 && strcmp(line[strlen(line)-1], "&") == 0){
+		if(strlen(line) != 0 && line[strlen(line)-1] == '&'){
 			line[strlen(line) - 1] = '\n';
 			background = true;
 		}
