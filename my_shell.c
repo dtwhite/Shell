@@ -97,8 +97,9 @@ int main(int argc, char* argv[]) {
 		int basePointer = 0;
 		while(tokens[basePointer] != NULL){
 			printf("We made it here");
-			/*int futurePointer = grabCommand(tokens, basePointer);
-			for(i=0;tokens[i]!=NULL;i++){
+			int futurePointer = grabCommand(tokens, basePointer);
+			printf("The future pointer is %d", futurePointer);
+			/*for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
 			}
 			if(strcmp(tokens[futurePointer], "&&") == 0)
@@ -122,8 +123,10 @@ int main(int argc, char* argv[]) {
 						waitpid(pid, &status, 0);
 					}	
 				}
-			}
-			basePointer = futurePointer;	*/		
+			}*/
+			//basePointer = futurePointer;	
+			basePointer++;
+				
 		}
 		/*else if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
