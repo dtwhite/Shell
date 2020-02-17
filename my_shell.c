@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 
 			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
-			/*if(strcmp(tokens[basePointer], "cd") == 0){
+			if(strcmp(tokens[basePointer], "cd") == 0){
 				int result = chdir(tokens[basePointer+1]);
 				if(result == -1)
 					perror("Shell");
@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
 						waitpid(pid, &status, 0);
 					}	
 				}
-			}*/
+			}
 			basePointer = futurePointer;	
 				
 		}
