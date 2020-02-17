@@ -41,22 +41,6 @@ char **tokenize(char *line)
   return tokens;
 }
 
-char * splitCommands(char *line){
-
-}
-
-int numOfAmbersands(char ** tokens){
-	if(tokenLength == 0)
-		return 0;
-	if(strcmp(tokens[tokenLength - 1], "&") == 0)
-		return 1;
-	else if(strcmp(tokens[tokenLength - 1], "&&") == 0)
-		return 2;
-	else if((strcmp(tokens[tokenLength - 1], "&&&") == 0))
-		return 3;
-	else
-		return 0;
-}
 
 int main(int argc, char* argv[]) {
 	char  line[MAX_INPUT_SIZE];            
