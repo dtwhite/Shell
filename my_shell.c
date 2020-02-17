@@ -90,6 +90,8 @@ int main(int argc, char* argv[]) {
 		bool parallel = false;
 		line[strlen(line)] = '\n';
 		tokens = tokenize(line);
+		printf("The number of tokens is %d", tokenLength);
+		printf("The number of ambersands is %d", numOfAmbersands(tokens));
 		switch(numOfAmbersands(tokens)){
 			case 1:
 				background = true;
