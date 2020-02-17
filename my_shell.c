@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
 			int futurePointer = grabCommand(tokens, basePointer);
 			printf("The future pointer is %d\n", futurePointer);
 
-			if(strcmp(tokens[futurePointer], "&&") == 0)
+			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
 			/*if(strcmp(tokens[basePointer], "cd") == 0){
 				int result = chdir(tokens[basePointer+1]);
