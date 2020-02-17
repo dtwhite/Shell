@@ -26,11 +26,12 @@ char **tokenize(char *line)
     if (readChar == ' ' || readChar == '\n' || readChar == '\t'){
       token[tokenIndex] = '\0';
       if (tokenIndex != 0){
-	tokens[tokenNo] = (char*)malloc(MAX_TOKEN_SIZE*sizeof(char));
-	strcpy(tokens[tokenNo++], token);
-	tokenIndex = 0; 
+		tokens[tokenNo] = (char*)malloc(MAX_TOKEN_SIZE*sizeof(char));
+		strcpy(tokens[tokenNo++], token);
+		tokenIndex = 0; 
       }
-    } else {
+    }
+	else {
       token[tokenIndex++] = readChar;
     }
   }
@@ -38,6 +39,15 @@ char **tokenize(char *line)
   free(token);
   tokens[tokenNo] = NULL ;
   return tokens;
+}
+
+grabCommand(char **tokens, int basePointer){
+	int counter = basePointer
+	while(strmp(tokens[counter], "&&") != 0){
+		counter++
+	}
+	tokens[counter] = NULL;
+	return counter;
 }
 
 
@@ -84,7 +94,34 @@ int main(int argc, char* argv[]) {
 		if(*tokens == NULL){
 			continue;
 		}
-		else if(strcmp(tokens[0], "cd")==0){
+		int basePointer = 0;
+		while(tokens[basePointer] != NULL){
+			int futurePointer = grabCommand(tokens, basePointer);
+			if(strcmp(tokens[futurePointer], "&&") == 0)
+				futurePointer++;
+			if(strcmp(tokens[basePointer], "cd") == 0){
+				int result = chdir(tokens[basePointer+1]);
+				if(result == -1)
+					perror("Shell");
+			}
+			else{
+				int retval = fork();
+				if(retval == 0){
+					execvp(tokens[basePointer], tokens);
+					printf("Shell: Incorrect Command\n");
+					exit(1);
+				}
+				else{
+					int status;
+					int pid = retval;
+					if(!background){
+						waitpid(pid, &status, 0);
+					}	
+				}
+			}
+			basePointer = futurePointer;			
+		}
+		/*else if(strcmp(tokens[0], "cd")==0){
 			int result = chdir(tokens[1]);
 			if(result == -1)
 				perror("Shell");
@@ -105,10 +142,10 @@ int main(int argc, char* argv[]) {
 				}
 				
 			}
-			for(i=0;tokens[i]!=NULL;i++){
+			/*for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
 			}
-		}
+		}*/
 		// Freeing the allocated memory	
 		for(i=0;tokens[i]!=NULL;i++){
 			free(tokens[i]);
