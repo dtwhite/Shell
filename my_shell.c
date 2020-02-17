@@ -10,8 +10,6 @@
 #define MAX_TOKEN_SIZE 64
 #define MAX_NUM_TOKENS 64
 
-
-int tokenLength;
 /* Splits the string by space and returns the array of tokens
 *
 */
@@ -41,6 +39,10 @@ char **tokenize(char *line)
   tokens[tokenNo] = NULL ;
   tokenLength = tokenNo;
   return tokens;
+}
+
+char * splitCommands(char *line){
+
 }
 
 int numOfAmbersands(char ** tokens){
@@ -88,29 +90,12 @@ int main(int argc, char* argv[]) {
 		bool background = false;
 		bool multiple = false;
 		bool parallel = false;
-		line[strlen(line)] = '\n';
-		tokens = tokenize(line);
-		printf("The number of tokens is %d", tokenLength);
-		printf("The number of ambersands is %d", numOfAmbersands(tokens));
-		switch(numOfAmbersands(tokens)){
-			case 1:
-				background = true;
-				line[strlen(line) - 1] = '\n';
-				tokens = tokenize(line);
-				break;
-			case 2:
-				multiple = true;
-				line[strlen(line) - 2] = '\n';
-				tokens = tokenize(line);
-				break;
-			case 3:
-				parallel = true;
-				line[strlen(line) - 3] = '\n';
-				tokens = tokenize(line);
-				break;
-			default:
-				continue;
+		if(strlen(line) != 0 && line[strlen(line) - 1] == '&'){
+			background = true;
+			line[strlen(line) -1] = '\n';
 		}
+		tokens = tokenize(line);
+
 		if(*tokens == NULL){
 			continue;
 		}
