@@ -98,6 +98,10 @@ int main(int argc, char* argv[]) {
 					int pid = retval;
 					wait(&pid);
 				}
+				else{
+					signal(SIGCHLD,SIG_IGN); 
+				}
+				
 			}
 			/*for(i=0;tokens[i]!=NULL;i++){
 				printf("found token %s (remove this debug output later)\n", tokens[i]);
