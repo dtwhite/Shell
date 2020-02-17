@@ -48,11 +48,6 @@ int grabCommand(char **tokens, int basePointer){
 		counter++;
 	}
 	return counter;
-	/*while(*tokens != NULL && strcmp(tokens[counter], "&&") != 0){
-		counter++;
-	}
-	printf("The counter is %d", counter);
-	tokens[counter] = NULL;*/
 }
 
 char **copyTokens(char **tokens, int basePointer, int endPointer){
