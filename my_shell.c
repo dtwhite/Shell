@@ -10,6 +10,8 @@
 #define MAX_TOKEN_SIZE 64
 #define MAX_NUM_TOKENS 64
 
+
+int tokenLength;
 /* Splits the string by space and returns the array of tokens
 *
 */
@@ -37,7 +39,19 @@ char **tokenize(char *line)
  
   free(token);
   tokens[tokenNo] = NULL ;
+  tokenLength = tokenNo;
   return tokens;
+}
+
+int numOfAmbersands(char ** tokens){
+	if(strcmp(tokens[tokenLength - 1], "&") == 0)
+		return 1;
+	else if(strcmp(tokens[tokenLength - 1], "&&") == 0)
+		return 2;
+	else if((strcmp(tokens[tokenLength - 1], "&&&") == 0))
+		return 3;
+	else
+		return 0;
 }
 
 int main(int argc, char* argv[]) {
@@ -70,13 +84,29 @@ int main(int argc, char* argv[]) {
 		//printf("Command entered: %s (remove this debug output later)\n", line);
 		/* END: TAKING INPUT */
 		bool background = false;
-		if(strlen(line) != 0 && line[strlen(line)-1] == '&'){
-			line[strlen(line) - 1] = '\n';
-			background = true;
-		}
-		else
-			line[strlen(line)] = '\n'; //terminate with new line
+		bool multiple = false;
+		bool parallel = false;
+		line[strlen(line)] = '\n';
 		tokens = tokenize(line);
+		switch(numOfAmbersands(tokens)){
+			case 1:
+				background = true;
+				line[strlen(line) - 1] = '\n';
+				tokens = tokenize(line);
+				break;
+			case 2:
+				multiple = true;
+				line[strlen(line) - 2] = '\n';
+				tokens = tokenize(line);
+				break;
+			case 3:
+				parallel = true;
+				line[strlen(line) - 3] = '\n';
+				tokens = tokenize(line);
+				break;
+			default:
+				continue;
+		}
 		if(*tokens == NULL){
 			continue;
 		}
