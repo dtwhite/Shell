@@ -71,11 +71,13 @@ int main(int argc, char* argv[]) {
 		//printf("Command entered: %s (remove this debug output later)\n", line);
 		/* END: TAKING INPUT */
 		bool background = false;
-		bool multiple = false;
-		bool parallel = false;
+
 		if(strlen(line) != 0 && line[strlen(line) - 1] == '&'){
 			background = true;
 			line[strlen(line) -1] = '\n';
+		}
+		else{
+			line[strlen(line)] = '\n';
 		}
 		tokens = tokenize(line);
 
