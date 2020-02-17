@@ -61,7 +61,7 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 	int counter = 0;
 	while(basePointer <= endPointer){
 		command[counter] = (char*)malloc(MAX_TOKEN_SIZE*sizeof(char));
-		strcpy(command[counter], tokens[basePointer])
+		strcpy(command[counter], tokens[basePointer]);
 	}
 	/*for(basePointer; basePointer < endPointer; basePointer++){
 		strcpy(command[counter], tokens[basePointer]);
