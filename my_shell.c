@@ -65,14 +65,10 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 		basePointer++;
 		counter++;
 	}
-	/*for(basePointer; basePointer < endPointer; basePointer++){
-		strcpy(command[counter], tokens[basePointer]);
-		counter++;
-	}*/
 	printf("the counter is %d", counter);
-	/*for(i=0;command[i]!=NULL;i++){
+	for(i=0;command[i]!=NULL;i++){
 		printf("found token %s\n", command[i]);
-	}*/
+	}
 	return command;
 }
 
