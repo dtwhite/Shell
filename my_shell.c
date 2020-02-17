@@ -44,6 +44,8 @@ char **tokenize(char *line)
 }
 
 int numOfAmbersands(char ** tokens){
+	if(tokenLength == 0)
+		return 0;
 	if(strcmp(tokens[tokenLength - 1], "&") == 0)
 		return 1;
 	else if(strcmp(tokens[tokenLength - 1], "&&") == 0)
