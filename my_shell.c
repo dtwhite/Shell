@@ -63,6 +63,7 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 		command[counter] = (char*)malloc(MAX_TOKEN_SIZE*sizeof(char));
 		strcpy(command[counter], tokens[basePointer]);
 		basePointer++;
+		counter++;
 	}
 	/*for(basePointer; basePointer < endPointer; basePointer++){
 		strcpy(command[counter], tokens[basePointer]);
