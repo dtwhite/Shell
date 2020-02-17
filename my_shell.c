@@ -61,7 +61,7 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 	for(i = 0; tokens[basePointer + i] != NULL; i++){
 		strcpy(command[i], tokens[basePointer + i]);
 	}
-	printf("I made it here")
+	printf("I made it here");
 	for(i=0;command[i]!=NULL;i++){
 		printf("found token %s (remove this debug output later)\n", command[i]);
 	}
