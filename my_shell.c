@@ -66,10 +66,6 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 		counter++;
 	}
 	command[counter] = NULL;
-	printf("the counter is %d\n", counter);
-	for(i=0;command[i]!=NULL;i++){
-		printf("found token %s\n", command[i]);
-	}
 	return command;
 }
 
@@ -120,7 +116,6 @@ int main(int argc, char* argv[]) {
 		int basePointer = 0;
 		while(tokens[basePointer] != NULL){
 			int futurePointer = grabCommand(tokens, basePointer);
-			printf("The future pointer is %d\n", futurePointer);
 			char **command = copyTokens(tokens, basePointer, futurePointer);
 			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
