@@ -37,7 +37,6 @@ char **tokenize(char *line)
  
   free(token);
   tokens[tokenNo] = NULL ;
-  tokenLength = tokenNo;
   return tokens;
 }
 
