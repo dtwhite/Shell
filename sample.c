@@ -1,3 +1,15 @@
+bool cdCommand(char **command, int index){
+	if(strcmp(command[index], "cd") == 0){ // This checks if the given command is cd and makes the chdir system call.
+		int result = chdir(command[index+1]);
+		if(result == -1)
+			perror("Shell");
+		}
+		return true;
+	}
+	else 
+		return false;
+}
+
 void reapDeadChildren(){
 	
 }
@@ -16,11 +28,8 @@ while(tokens[basePointer] != NULL){
 			char **copyCommand = copyTokens(command, index, newIndex);
 			if(command[newIndex] != NULL && strcmp(command[newIndex], delimiter) == 0)
 				newIndex++;
-			if(strcmp(command[newIndex], "cd") == 0){ // This checks if the given command is cd and makes the chdir system call.
-				int result = chdir(tokens[newIndex+1]);
-				if(result == -1)
-					perror("Shell");
-			}
+			if(cdCommand(command, newIndex) == true)
+				continue;
 			else{
 				if(command[newIndex] == NULL)
 					lastCommand = true;
@@ -38,7 +47,6 @@ while(tokens[basePointer] != NULL){
 					}
 				}
 			}
-			
 			indexPointer = newIndex;
 		}
 	}
