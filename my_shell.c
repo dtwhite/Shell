@@ -40,11 +40,31 @@ char **tokenize(char *line)
   tokens[tokenNo] = NULL ;
   return tokens;
 }
+/** 
+ * This method checks to see if the given command is to be 
+ * run in parallel mode. It achieves this by seeing if the 
+ * command contains a '&&&' token.
+*/
+bool isParallelCommand(char **command){
+	int counter = 0;
+	while(command[counter] != NULL){
+		if(strcmp(command[counter], "&&&") == 0)
+			return true;
+	}
+	return false;
+}
 
-int grabCommand(char **tokens, int basePointer){
+bool isBackgroundCommand(char **command){
+	if(strlen(line) != 0 && line[strlen(line) - 1] == '&')
+		return true;
+	else
+		return false;
+}
+
+int grabCommand(char **tokens, int basePointer, char **delimiter){
 	int counter = basePointer;
 	int i;
-	while(tokens[counter] != NULL && strcmp(tokens[counter], "&&") != 0){
+	while(tokens[counter] != NULL && strcmp(tokens[counter], *delimiter) != 0){
 		counter++;
 	}
 	return counter;
@@ -62,6 +82,12 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 	}
 	command[counter] = NULL;
 	return command;
+}
+
+void executeShellBuiltin(char** command){
+	execvp(command[0], command);
+	printf("Shell: Incorrect Command\n");
+	exit(1);
 }
 
 
@@ -110,7 +136,8 @@ int main(int argc, char* argv[]) {
 		}
 		int basePointer = 0;
 		while(tokens[basePointer] != NULL){
-			int futurePointer = grabCommand(tokens, basePointer);
+			char delim[]= "&&";
+			int futurePointer = grabCommand(tokens, basePointer, &delim);
 			char **command = copyTokens(tokens, basePointer, futurePointer);
 			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
@@ -122,14 +149,31 @@ int main(int argc, char* argv[]) {
 			else{
 				int retval = fork();
 				if(retval == 0){
-					execvp(command[0], command);
-					printf("Shell: Incorrect Command\n");
-					exit(1);
+					if(isParallelCommand(command)){
+						char delimiter[] = "&&&";
+						int indexPointer = 0;
+						while(command[indexPointer] != NULL){
+							int newIndex = grabCommand(command, indexPointer, &delimiter);
+							char **copyCommand = copyTokens(command, index, newIndex);
+							if(command[newIndex] != NULL && strcmp(command[newIndex], delimiter) == 0)
+								newIndex++;
+							executeShellBuiltin(copyCommand);
+							indexPointer = newIndex;
+							if()
+						}
+					}
+					else if(isBackgroundCommand(command)){
+						background = true;
+						executeShellBuiltin(command);
+					}
+					else{
+						executeShellBuiltin(command);
+					}
 				}
 				else{
 					int status;
 					int pid = retval;
-					if(!background){
+					if(!background || !lastParallel){
 						waitpid(pid, &status, 0);
 					}	
 				}
