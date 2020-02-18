@@ -10,8 +10,27 @@ bool cdCommand(char **command, int index){
 		return false;
 }
 
-void reapDeadChildren(){
-	
+int countNumberParallelCommands(char ** command){
+	int counter = 0; 
+	int commandIndex = 0;
+	while(command[commandIndex] != NULL){
+		if(strcmp(comand[commandIndex], "&&&") == 0)
+			counter++;
+	}
+	return counter;
+}
+
+
+void reapDeadChildren(int *pidArray, int length){
+	int i;
+	for(i = 0; i < length; i++){
+		if(pidArray[i] != -1){
+			int status
+			int result = waitpid(pidArray[i], &status, WNOHANG);
+			if(result != 0)
+				pidArray[i] = -1;
+		}
+	}
 }
 
 int basePointer = 0;
@@ -23,6 +42,9 @@ while(tokens[basePointer] != NULL){
 		char delimiter[] = "&&&";
 		int indexPointer = 0;
 		bool lastCommand = false;
+		int *pidArray = (int *)malloc(sizeof(int) * countNumberParallelCommands(command)); 
+		int pidArrayIndex= 0; 
+		
 		while(command[indexPointer] != NULL){
 	        int newIndex = grabCommand(command, indexPointer, &delimiter);
 			char **copyCommand = copyTokens(command, index, newIndex);
@@ -43,8 +65,10 @@ while(tokens[basePointer] != NULL){
 						wait(&pid);
 					}
 					else{
-
+						pidArray[index] = retval;
+						index++;
 					}
+					reapDeadChildren(pidArray);
 				}
 			}
 			indexPointer = newIndex;
