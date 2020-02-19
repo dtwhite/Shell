@@ -6,10 +6,14 @@
 #include <sys/wait.h>
 #include <stdbool.h>
 #include "uthash.h"
+#include <signal.h>
 
 #define MAX_INPUT_SIZE 1024
 #define MAX_TOKEN_SIZE 64
 #define MAX_NUM_TOKENS 64
+#define FOREGROUND_PROCESS_GROUP_ID 10
+#define BACKGROUND_PROCESS_GROUP_ID 20
+#define PARENT_PROCESS_GROUP_ID 1
 
 struct process {
 	int pid; // the key for the hashtable.
@@ -53,6 +57,14 @@ void forceClearProcessTable(){
 		removeProcessFromTable(proc);
 	}
 }
+
+void ctrlCHandler(int sig_num) 
+{ 	
+	int status;
+    signal(SIGINT, ctrlCHandler); 
+    kill(-FOREGROUND_PROCESS_GROUP_ID, SIGINT);
+    printf("\n");
+} 
 
 /* Splits the string by space and returns the array of tokens
 *
@@ -169,6 +181,7 @@ int main(int argc, char* argv[]) {
 			return -1;
 		}
 	}
+	signal(SIGINT, ctrlCHandler); 
 	while(1) {	
 		int cstatus;		
 		/* BEGIN: TAKING INPUT */
@@ -231,7 +244,8 @@ int main(int argc, char* argv[]) {
 						else{
 							if(lastCommand){
 								int status;
-								int pid = retval; 
+								int pid = retval;
+								setpgid(pid, FOREGROUND_PROCESS_GROUP_ID); 
 								waitpid(pid, &status, 0);
 							}
 							else{
@@ -252,6 +266,7 @@ int main(int argc, char* argv[]) {
 				    if(retval == 0)
 					    executeShellBuiltin(execCommand);
 					else
+						setpgid(retval, BACKGROUND_PROCESS_GROUP_ID);
 						addProcessToTable(retval);
 				 }
 			}
@@ -263,6 +278,7 @@ int main(int argc, char* argv[]) {
 				    	executeShellBuiltin(command);
 				    else{
 						int pid = retval;
+						setpgid(pid, FOREGROUND_PROCESS_GROUP_ID);
 						waitpid(pid, &cstatus, WUNTRACED);
 					}
 				}

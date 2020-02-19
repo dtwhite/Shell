@@ -59,13 +59,11 @@ void forceClearProcessTable(){
 }
 
 void ctrlCHandler(int sig_num) 
-{ 
-    /* Reset handler to catch SIGINT next time. 
-       Refer http://en.cppreference.com/w/c/program/signal */
+{ 	
+	int status;
     signal(SIGINT, ctrlCHandler); 
     kill(-FOREGROUND_PROCESS_GROUP_ID, SIGINT);
     printf("\n");
-    //printf("\n Cannot be terminated using Ctrl+C \n");
 } 
 
 /* Splits the string by space and returns the array of tokens
@@ -230,7 +228,6 @@ int main(int argc, char* argv[]) {
 				while(command[indexPointer] != NULL){
 			        int newIndex = grabCommand(command, indexPointer, delimiter);
 					char **copyCommand = copyTokens(command, indexPointer, newIndex);
-					//rintf("The value of the newIndex is %d\n", newIndex);
 					if(command[newIndex] != NULL && strcmp(command[newIndex], delimiter) == 0)
 						newIndex++;
 
