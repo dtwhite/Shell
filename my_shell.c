@@ -150,7 +150,7 @@ bool cdCommand(char **command, int index){
 	if(strcmp(command[index], "cd") == 0){ // This checks if the given command is cd and makes the chdir system call.
 		int result = chdir(command[index+1]);
 		if(result == -1){
-			perror("Shell");
+			printf("Shell: Incorrect command\n");
 		}
 		return true;
 	}
