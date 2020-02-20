@@ -41,7 +41,7 @@ void clearProcessTable(){
 	struct process *proc, *tmp;
 	int status;
 	HASH_ITER(hh, processTable, proc, tmp){
-		if(waitpid(proc->pid, &status, WNOHANG) != 0){
+		if(waitpid(proc->pid, &status, WNOHANG)> 0){
 			printf("Shell:  Background process finished\n");
     		removeProcessFromTable(proc);
     	}
@@ -60,9 +60,9 @@ void forceClearProcessTable(){
 
 void ctrlCHandler(int sig_num) 
 { 	
-	int status;
+	/*int status;
     signal(SIGINT, ctrlCHandler); 
-    kill(-FOREGROUND_PROCESS_GROUP_ID, SIGINT);
+    kill(-(pid_t)FOREGROUND_PROCESS_GROUP_ID, SIGINT);*/
     printf("\n");
 } 
 
@@ -228,7 +228,6 @@ int main(int argc, char* argv[]) {
 				while(command[indexPointer] != NULL){
 			        int newIndex = grabCommand(command, indexPointer, delimiter);
 					char **copyCommand = copyTokens(command, indexPointer, newIndex);
-					//rintf("The value of the newIndex is %d\n", newIndex);
 					if(command[newIndex] != NULL && strcmp(command[newIndex], delimiter) == 0)
 						newIndex++;
 
@@ -238,6 +237,7 @@ int main(int argc, char* argv[]) {
 							lastCommand = true;
 						}
 						int retval = fork();
+						//setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID); 
 						if(retval == 0){
 							executeShellBuiltin(copyCommand);
 						}
@@ -245,7 +245,7 @@ int main(int argc, char* argv[]) {
 							if(lastCommand){
 								int status;
 								int pid = retval;
-								setpgid(pid, FOREGROUND_PROCESS_GROUP_ID); 
+								//setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID); 
 								waitpid(pid, &status, 0);
 							}
 							else{
@@ -263,10 +263,11 @@ int main(int argc, char* argv[]) {
 				if(cdCommand(command, 0) == true){ }
 				else{
 				    int retval = fork();
+				    setpgid((pid_t)retval, (pid_t)retval);
 				    if(retval == 0)
 					    executeShellBuiltin(execCommand);
 					else
-						setpgid(retval, BACKGROUND_PROCESS_GROUP_ID);
+						//setpgid(retval, (pid_t)BACKGROUND_PROCESS_GROUP_ID);
 						addProcessToTable(retval);
 				 }
 			}
@@ -274,11 +275,12 @@ int main(int argc, char* argv[]) {
 				if(cdCommand(command, 0) == true){ }
 				else{
 				    int retval = fork();
+				    //setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID);
 				    if(retval == 0)
 				    	executeShellBuiltin(command);
 				    else{
 						int pid = retval;
-						setpgid(pid, FOREGROUND_PROCESS_GROUP_ID);
+						//setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID);
 						waitpid(pid, &cstatus, WUNTRACED);
 					}
 				}
