@@ -80,7 +80,7 @@ void forceClearProcessTable(){
  * This is the Ctrl-C signal handler that kills the foreground
  * processes. 
 */
-void ctrlCHandler(int sig_num) 
+void ctrlCHandler() 
 { 	
     printf("\n");
 } 
@@ -92,7 +92,8 @@ char **tokenize(char *line)
 {
   char **tokens = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
   char *token = (char *)malloc(MAX_TOKEN_SIZE * sizeof(char));
-  int i, tokenIndex = 0, tokenNo = 0;
+  int tokenIndex = 0, tokenNo = 0;
+  unsigned int i;
 
   for(i =0; i < strlen(line); i++){
 
@@ -145,7 +146,6 @@ bool isBackgroundCommand(char **command, int lastTokenIndex){
 */
 int grabCommand(char **tokens, int basePointer, char *delimiter){
 	int counter = basePointer;
-	int i;
 	while(tokens[counter] != NULL && strcmp(tokens[counter], delimiter) != 0){
 		counter++;
 	}
@@ -155,7 +155,6 @@ int grabCommand(char **tokens, int basePointer, char *delimiter){
  * This method creates an array of tokens for the given command.
 */
 char **copyTokens(char **tokens, int basePointer, int endPointer){
-	int i;
 	char **command = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
 	int counter = 0;
 	while(basePointer < endPointer){
@@ -198,8 +197,8 @@ int main(int argc, char* argv[]) {
 	FILE* fp;
 	if(argc == 2) {
 		fp = fopen(argv[1],"r");
-		if(fp < 0) {
-			printf("File doesn't exists.");
+		if(fp == NULL) {
+			printf("File doesn't exists.\n");
 			return -1;
 		}
 	}
@@ -276,7 +275,6 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			else if(isBackgroundCommand(command, ds)){ // This block executes if the command is to be run in the background.
-				bool background = true;
 				int commandBoundaries = grabCommand(command, 0, "&");
 				char **execCommand = copyTokens(command, 0, commandBoundaries); 
 				if(cdCommand(command, 0) == true){ }

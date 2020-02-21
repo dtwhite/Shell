@@ -15,6 +15,12 @@
 #define BACKGROUND_PROCESS_GROUP_ID 20
 #define PARENT_PROCESS_GROUP_ID 1
 
+/**
+ * This is a hashtable that keeps track of the processs
+ * running in the background. The implementation of 
+ * the hashtable was done by the University of Texas which
+ * was imported from the uthash package.
+ * */
 struct process {
 	int pid; // the key for the hashtable.
 	int value; 
@@ -23,6 +29,9 @@ struct process {
 
 struct process *processTable; //Global processTable
 
+/**
+ * This method adds the process to the global hashtable.
+*/
 void addProcessToTable(int pid){
 	struct process *proc;
 
@@ -31,12 +40,19 @@ void addProcessToTable(int pid){
     proc->value = 0;
     HASH_ADD_INT( processTable, pid, proc );  /* id: name of key field */
 }
-
+/**
+ * This method removes the background process from 
+ * the hashtable.
+*/
 void removeProcessFromTable(struct process *proc){
 	HASH_DEL(processTable, proc);
 	free(proc);
 }
 
+/**
+ * This method iterates through the process hashtable and checks 
+ * and clears away any dead processes.
+ * */
 void clearProcessTable(){
 	struct process *proc, *tmp;
 	int status;
@@ -47,7 +63,10 @@ void clearProcessTable(){
     	}
 	}
 }
-
+/**
+ * This method kills and reaps all the processes out of
+ * the process hashtable.
+*/
 void forceClearProcessTable(){
 	struct process *proc, *tmp;
 	int status;
@@ -57,12 +76,12 @@ void forceClearProcessTable(){
 		removeProcessFromTable(proc);
 	}
 }
-
-void ctrlCHandler(int sig_num) 
+/**
+ * This is the Ctrl-C signal handler that kills the foreground
+ * processes. 
+*/
+void ctrlCHandler() 
 { 	
-	/*int status;
-    signal(SIGINT, ctrlCHandler); 
-    kill(-(pid_t)FOREGROUND_PROCESS_GROUP_ID, SIGINT);*/
     printf("\n");
 } 
 
@@ -73,7 +92,8 @@ char **tokenize(char *line)
 {
   char **tokens = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
   char *token = (char *)malloc(MAX_TOKEN_SIZE * sizeof(char));
-  int i, tokenIndex = 0, tokenNo = 0;
+  int tokenIndex = 0, tokenNo = 0;
+  unsigned int i;
 
   for(i =0; i < strlen(line); i++){
 
@@ -109,25 +129,32 @@ bool isParallelCommand(char **command){
 	}
 	return false;
 }
-
+/**
+ * This method checks to see if the given command is to
+ * be run in background mode. It achieves this by seeing 
+ * if the command contains a '&' token.
+*/
 bool isBackgroundCommand(char **command, int lastTokenIndex){
 	if(strcmp(command[lastTokenIndex], "&") == 0)
 		return true;
 	else
 		return false;
 }
-
+/**
+ * This method iterates over the given the command and returns 
+ * a index pointing to the end of the command. 
+*/
 int grabCommand(char **tokens, int basePointer, char *delimiter){
 	int counter = basePointer;
-	int i;
 	while(tokens[counter] != NULL && strcmp(tokens[counter], delimiter) != 0){
 		counter++;
 	}
 	return counter;
 }
-
+/**
+ * This method creates an array of tokens for the given command.
+*/
 char **copyTokens(char **tokens, int basePointer, int endPointer){
-	int i;
 	char **command = (char **)malloc(MAX_NUM_TOKENS * sizeof(char *));
 	int counter = 0;
 	while(basePointer < endPointer){
@@ -139,13 +166,17 @@ char **copyTokens(char **tokens, int basePointer, int endPointer){
 	command[counter] = NULL;
 	return command;
 }
-
+/**
+ * This method executes the given command.
+*/
 void executeShellBuiltin(char** command){
 	execvp(command[0], command);
 	printf("Shell: Incorrect command\n");
 	exit(1);
 }
-
+/**
+ * This method executes the cd command.
+*/
 bool cdCommand(char **command, int index){
 	if(strcmp(command[index], "cd") == 0){ // This checks if the given command is cd and makes the chdir system call.
 		int result = chdir(command[index+1]);
@@ -158,16 +189,6 @@ bool cdCommand(char **command, int index){
 		return false;
 }
 
-int countNumberParallelCommands(char ** command){
-	int counter = 0;
-	int i;
-	for(i = 0; command[i] != NULL; i++){
-		if(strcmp(command[i], "&&&") == 0)
-			counter++;	
-	} 
-	return counter;
-}
-
 int main(int argc, char* argv[]) {
 	char  line[MAX_INPUT_SIZE];            
 	char  **tokens;              
@@ -176,8 +197,8 @@ int main(int argc, char* argv[]) {
 	FILE* fp;
 	if(argc == 2) {
 		fp = fopen(argv[1],"r");
-		if(fp < 0) {
-			printf("File doesn't exists.");
+		if(fp == NULL) {
+			printf("File doesn't exists.\n");
 			return -1;
 		}
 	}
@@ -207,25 +228,24 @@ int main(int argc, char* argv[]) {
 		int basePointer = 0;
 		char delim[]= "&&";
 		while(tokens[basePointer] != NULL){
-			clearProcessTable();
+			clearProcessTable(); // Clears all the dead background child processes.
 			int futurePointer = grabCommand(tokens, basePointer, delim);
 			char **command = copyTokens(tokens, basePointer, futurePointer);
 			if(tokens[futurePointer] != NULL && strcmp(tokens[futurePointer], "&&") == 0)
 				futurePointer++;
 			int ds;
-			for(ds = 0; command[ds] != NULL; ds++){}
+			for(ds = 0; command[ds] != NULL; ds++){} //Gets the last token of the command, which helps the isBackground method. 
 			ds--;
-			int numberOfParallelCommands = countNumberParallelCommands(command);
-			if(strcmp(command[0], "exit") == 0){
+			if(strcmp(command[0], "exit") == 0){ //Handles the exit command case.
 				forceClearProcessTable();
 				exit(0);
 			}
-			else if(isParallelCommand(command)){
+			else if(isParallelCommand(command)){ //This block of code runs if the command is to be run in parallel.
 				char delimiter[] = "&&&";
 				int indexPointer = 0;
 				bool lastCommand = false;
 				
-				while(command[indexPointer] != NULL){
+				while(command[indexPointer] != NULL){ // Loops through the parallel commands and executes them.
 			        int newIndex = grabCommand(command, indexPointer, delimiter);
 					char **copyCommand = copyTokens(command, indexPointer, newIndex);
 					if(command[newIndex] != NULL && strcmp(command[newIndex], delimiter) == 0)
@@ -237,15 +257,13 @@ int main(int argc, char* argv[]) {
 							lastCommand = true;
 						}
 						int retval = fork();
-						//setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID); 
 						if(retval == 0){
 							executeShellBuiltin(copyCommand);
 						}
 						else{
-							if(lastCommand){
+							if(lastCommand){ // Waits for the last command to finish before moving on.
 								int status;
 								int pid = retval;
-								//setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID); 
 								waitpid(pid, &status, 0);
 							}
 							else{
@@ -256,8 +274,7 @@ int main(int argc, char* argv[]) {
 					indexPointer = newIndex;
 				}
 			}
-			else if(isBackgroundCommand(command, ds)){
-				bool background = true;
+			else if(isBackgroundCommand(command, ds)){ // This block executes if the command is to be run in the background.
 				int commandBoundaries = grabCommand(command, 0, "&");
 				char **execCommand = copyTokens(command, 0, commandBoundaries); 
 				if(cdCommand(command, 0) == true){ }
@@ -267,7 +284,6 @@ int main(int argc, char* argv[]) {
 				    if(retval == 0)
 					    executeShellBuiltin(execCommand);
 					else
-						//setpgid(retval, (pid_t)BACKGROUND_PROCESS_GROUP_ID);
 						addProcessToTable(retval);
 				 }
 			}
@@ -275,12 +291,10 @@ int main(int argc, char* argv[]) {
 				if(cdCommand(command, 0) == true){ }
 				else{
 				    int retval = fork();
-				    //setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID);
 				    if(retval == 0)
 				    	executeShellBuiltin(command);
 				    else{
 						int pid = retval;
-						//setpgid(pid, (pid_t)FOREGROUND_PROCESS_GROUP_ID);
 						waitpid(pid, &cstatus, WUNTRACED);
 					}
 				}
